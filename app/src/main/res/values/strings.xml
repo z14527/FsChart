@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FsChart</string>
+    <string name="base_permission">APP启动需要访问文件，使用网络，访问通讯录等权限</string>
 </resources>

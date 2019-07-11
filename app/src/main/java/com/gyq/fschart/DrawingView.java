@@ -9,11 +9,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.whieenz.LogCook;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,6 +60,14 @@ public class DrawingView extends View {
         mDrawMode = false;
         savePath = new LinkedList<>();
         matrix = new Matrix();
+        String logPath = Environment.getExternalStorageDirectory().getPath()+"/download/";
+        LogCook.getInstance() // 单例获取LogCook实例
+                .setLogPath(logPath) //设置日志保存路径
+                .setLogName("test.log") //设置日志文件名
+                .isOpen(true)  //是否开启输出日志
+                .isSave(true)  //是否保存日志
+                .initialize(); //完成初始化Crash监听
+
     }
 
     @Override
@@ -76,7 +87,7 @@ public class DrawingView extends View {
                 widthSize = mBitmap.getWidth();
             }
         }
-        Log.d(TAG, "onMeasure: heightSize: " + heightSize + " widthSize: " + widthSize);
+        LogCook.d(TAG, "onMeasure: heightSize: " + heightSize + " widthSize: " + widthSize);
         setMeasuredDimension(widthSize, heightSize);
     }
 
@@ -95,6 +106,9 @@ public class DrawingView extends View {
         super.onDraw(canvas);
         // 根据图片尺寸缩放图片，同样只考虑了高大于宽的情况
         float proportion = (float) canvas.getHeight() / mBitmap.getHeight();
+        LogCook.d(TAG,"canvas.getHeight()="+canvas.getHeight());
+        LogCook.d(TAG,"mBitmap.getHeight()="+mBitmap.getHeight());
+        LogCook.d(TAG,"proportion="+proportion);
         if (proportion < 1) {
             mProportion = proportion;
             matrix.reset();
@@ -213,7 +227,7 @@ public class DrawingView extends View {
     }
 
     public void loadImage(Bitmap bitmap) {
-        Log.d(TAG, "loadImage: ");
+        LogCook.d(TAG, "loadImage: ");
         mOriginBitmap = bitmap;
         mBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         mCanvas = new Canvas(mBitmap);
@@ -221,7 +235,7 @@ public class DrawingView extends View {
     }
 
     public void undo() {
-        Log.d(TAG, "undo: recall last path");
+        LogCook.d(TAG,"undo: recall last path");
         if (savePath != null && savePath.size() > 0) {
             // 清空画布
             mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -251,7 +265,7 @@ public class DrawingView extends View {
     public boolean saveImage(String filePath, String filename, Bitmap.CompressFormat format,
                              int quality) {
         if (quality > 100) {
-            Log.d("saveImage", "quality cannot be greater that 100");
+            LogCook.d(TAG, "quality cannot be greater that 100");
             return false;
         }
         File file;
