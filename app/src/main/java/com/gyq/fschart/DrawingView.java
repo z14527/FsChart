@@ -22,7 +22,13 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class DrawingView extends View {
     private static final String TAG = "DrawingView";
@@ -41,6 +47,7 @@ public class DrawingView extends View {
     private Matrix matrix;
     private float mPaintBarPenSize;
     private int mPaintBarPenColor;
+    private List<Float> fsList = new ArrayList<Float>();
 
     public DrawingView(Context c) {
         this(c, null);
@@ -74,6 +81,7 @@ public class DrawingView extends View {
         savePath = new LinkedList<>();
         matrix = new Matrix();
         String logPath = Environment.getExternalStorageDirectory().getPath()+"/download/";
+
     }
 
     @Override
@@ -238,6 +246,18 @@ public class DrawingView extends View {
         mOriginBitmap = bitmap;
         mBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         mCanvas = new Canvas(mBitmap);
+        float x0 = 726;
+        float y0 = 651;
+        float r = (1090-726);
+        mPath = new Path();
+        mPath.reset();
+        mPath.moveTo(x0, y0);
+        for(int i=0;i<24;i++){
+            float x1 = (float)(x0 + r*cos(i*PI/12));
+            float y1 = (float)(y0 + r*sin(i*PI/12));
+            mPath.lineTo(x1,y1);
+            mCanvas.drawPath(mPath, mPaint);
+        }
         invalidate();
     }
 
