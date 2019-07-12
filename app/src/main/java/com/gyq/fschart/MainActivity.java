@@ -4,10 +4,14 @@ import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rxpermisson.PermissionAppCompatActivity;
@@ -16,12 +20,47 @@ import rx.Subscriber;
 
 public class MainActivity extends PermissionAppCompatActivity implements View.OnClickListener{
     private DrawingView mDrawingView;
+    private static TextView mTextView = null;
     private static int COLOR_PANEL = 0;
     private static int BRUSH = 0;
     private ImageButton mColorPanel;
     private ImageButton mBrush;
     private ImageButton mUndo;
     private ImageButton mSave;
+
+    public static Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            int what = msg.what;
+            switch (what) {
+                case 1:
+                    String mt = msg.getData().getString("send");
+                    if(!mTextView.equals(null)){
+                        if(mTextView.getText().length()<1000)
+                            mTextView.append("\n"+mt);
+                        else
+                            mTextView.setText(mt);
+                    }
+                    break;
+                case 3:
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }).start();
+                    break;
+                case 4:
+
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
+
+        ;
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +88,8 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
     }
     private void initViews() {
         mDrawingView = (DrawingView) findViewById(R.id.img_screenshot);
+        mTextView = (TextView)findViewById(R.id.tvmessage);
+        mTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
         mBrush = (ImageButton) findViewById(R.id.brush);
         mColorPanel = (ImageButton) findViewById(R.id.color_panel);
         mUndo = (ImageButton) findViewById(R.id.undo);

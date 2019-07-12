@@ -4,20 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <com.gyq.fschart.DrawingView
+        android:id="@+id/img_screenshot"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center" />
+    <TextView
+        android:id="@+id/tvmessage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/translucent">
-
-        <com.gyq.fschart.DrawingView
-            android:id="@+id/img_screenshot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-    </FrameLayout>
-
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:layout_gravity="center" />
     <LinearLayout
         android:id="@+id/paint_bar"
         android:layout_width="match_parent"
