@@ -42,12 +42,22 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     }
                     break;
                 case 3:
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
+                    String mt2 = msg.getData().getString("send");
+                    String[] mt3 = mt2.split(":");
+                    if(mt3.length>=2){
+                        int k = Integer.parseInt(mt3[0]);
+                        double r = Double.parseDouble(mt3[1]);
+                        String fs ="酉辛戌乾亥壬子癸丑艮寅甲卯乙辰巽巳丙午丁未坤申庚";
+                        if(k>=0 && k<24) {
+                            String mt4 = fs.substring(k,k+1)+": "+r;
+                            if (!mTextView.equals(null)) {
+                                if (mTextView.getText().length() < 1000)
+                                    mTextView.append("\n" + mt4);
+                                else
+                                    mTextView.setText(mt4);
+                            }
                         }
-                    }).start();
+                    }
                     break;
                 case 4:
 

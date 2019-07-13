@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import java.util.List;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 public class DrawingView extends View {
     private static final String TAG = "DrawingView";
@@ -48,6 +50,9 @@ public class DrawingView extends View {
     private float mPaintBarPenSize;
     private int mPaintBarPenColor;
     private List<Float> fsList = new ArrayList<Float>();
+    private float x0 = 726;
+    private float y0 = 651;
+    private float r = (1090-726);
 
     public DrawingView(Context c) {
         this(c, null);
@@ -63,13 +68,13 @@ public class DrawingView extends View {
     }
 
 
-    private void sendMsg(String s) {
+    private void sendMsg(String s,int type) {
         Message msg = new Message();
         Bundle bundle = new Bundle();
         bundle.clear();
         bundle.putString("send", s);
         msg.setData(bundle);
-        msg.what = 1;
+        msg.what = type;
         MainActivity.handler.sendMessage(msg);
     }
 
@@ -163,7 +168,15 @@ public class DrawingView extends View {
                 mX = x;
                 mY = y;
                 mCanvas.drawPath(mPath, mPaint);
-                sendMsg("x="+x+" y="+y);
+        //        sendMsg("x="+x+" y="+y);
+                for(int k=0;k<24;k++){
+                    double theta = PI*Math.atan((y-y0)/(x-x0))/180;
+                    if(k*15<theta && (k+1)*15>theta){
+                        double r1 = sqrt((y-y0)*(y-y0)+(x-x0)*(x-x0));
+                        sendMsg(k+":"+r1,3);
+                        break;
+                    }
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 float dx = Math.abs(x - mX);
@@ -242,13 +255,9 @@ public class DrawingView extends View {
     }
 
     public void loadImage(Bitmap bitmap) {
-        sendMsg("loadImage: ");
         mOriginBitmap = bitmap;
         mBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         mCanvas = new Canvas(mBitmap);
-        float x0 = 726;
-        float y0 = 651;
-        float r = (1090-726);
         mPath = new Path();
         mPath.reset();
         mPath.moveTo(x0, y0);
@@ -262,7 +271,6 @@ public class DrawingView extends View {
     }
 
     public void undo() {
-        sendMsg("undo: recall last path");
         if (savePath != null && savePath.size() > 0) {
             // 清空画布
             mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -292,7 +300,6 @@ public class DrawingView extends View {
     public boolean saveImage(String filePath, String filename, Bitmap.CompressFormat format,
                              int quality) {
         if (quality > 100) {
-            sendMsg("quality cannot be greater that 100");
             return false;
         }
         File file;
@@ -348,4 +355,22 @@ public class DrawingView extends View {
             return paintWidth;
         }
     }
+    public boolean panduan(Point a, Point b, Point c, Point p) {
+        double abc = triangleArea(a, b, c);
+        double abp = triangleArea(a, b, p);
+        double acp = triangleArea(a, c, p);
+        double bcp = triangleArea(b, c, p);
+        if (abc == abp + acp + bcp) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private double triangleArea(Point a, Point b, Point c) {// 返回三个点组成三角形的面积
+        double result = Math.abs((a.x * b.y + b.x * c.y + c.x * a.y - b.x * a.y
+                - c.x * b.y - a.x * c.y) / 2.0D);
+        return result;
+    }
+
 }
