@@ -169,8 +169,8 @@ public class DrawingView extends View {
                 mY = y;
                 mCanvas.drawPath(mPath, mPaint);
         //        sendMsg("x="+x+" y="+y);
-                for(int k=0;k<24;k++){
-                    double theta = PI*Math.atan((y-y0)/(x-x0))/180;
+                for(int k=-12;k<12;k++){
+                    double theta = 180*Math.atan((y-y0)/(x-x0))/PI;
                     if(k*15<theta && (k+1)*15>theta){
                         double r1 = sqrt((y-y0)*(y-y0)+(x-x0)*(x-x0));
                         sendMsg(k+":"+r1,3);

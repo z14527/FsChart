@@ -47,7 +47,7 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     if(mt3.length>=2){
                         int k = Integer.parseInt(mt3[0]);
                         double r = Double.parseDouble(mt3[1]);
-                        String fs ="酉辛戌乾亥壬子癸丑艮寅甲卯乙辰巽巳丙午丁未坤申庚";
+                        String fs ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
                         if(k>=0 && k<24) {
                             String mt4 = fs.substring(k,k+1)+": "+r;
                             if (!mTextView.equals(null)) {
