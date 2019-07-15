@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
@@ -169,22 +170,29 @@ public class DrawingView extends View {
                 mY = y;
                 mCanvas.drawPath(mPath, mPaint);
         //        sendMsg("x="+x+" y="+y);
-                for(int k=-12;k<12;k++){
-                    double theta = 180*Math.atan((y-y0)/(x-x0))/PI;
-                    if(k*15<theta && (k+1)*15>theta){
-                        double r1 = sqrt((y-y0)*(y-y0)+(x-x0)*(x-x0));
-                        sendMsg(k+":"+r1,3);
-                        break;
-                    }
-                }
-                break;
+                 break;
             case MotionEvent.ACTION_MOVE:
-                float dx = Math.abs(x - mX);
-                float dy = Math.abs(y - mY);
+                float dx = abs(x - mX);
+                float dy = abs(y - mY);
                 if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
                     mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
                     mX = x;
                     mY = y;
+                    for (int k = 0; k < 6; k++) {
+                        double theta = abs(180 * Math.atan((y - y0) / (x - x0)) / PI);
+                        if (k * 15 < theta && (k + 1) * 15 > theta) {
+                            double r1 = sqrt((y - y0) * (y - y0) + (x - x0) * (x - x0));
+                            int k1 = k;
+                            if (x < x0 && y > y0)
+                                k1 = 11 - k1;
+                            if (x < x0 && y < y0)
+                                k1 = 12 + k1;
+                            if (x > x0 && y < y0)
+                                k1 = 23 - k1;
+                            sendMsg(k1 + ":" + (int) (r1), 3);
+                            break;
+                        }
+                    }
                 }
                 mCanvas.drawPath(mPath, mPaint);
                 break;
@@ -368,7 +376,7 @@ public class DrawingView extends View {
     }
 
     private double triangleArea(Point a, Point b, Point c) {// 返回三个点组成三角形的面积
-        double result = Math.abs((a.x * b.y + b.x * c.y + c.x * a.y - b.x * a.y
+        double result = abs((a.x * b.y + b.x * c.y + c.x * a.y - b.x * a.y
                 - c.x * b.y - a.x * c.y) / 2.0D);
         return result;
     }

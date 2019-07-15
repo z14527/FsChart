@@ -46,13 +46,13 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     String[] mt3 = mt2.split(":");
                     if(mt3.length>=2){
                         int k = Integer.parseInt(mt3[0]);
-                        double r = Double.parseDouble(mt3[1]);
+                        int r = Integer.parseInt(mt3[1]);
                         String fs ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
                         if(k>=0 && k<24) {
                             String mt4 = fs.substring(k,k+1)+": "+r;
                             if (!mTextView.equals(null)) {
                                 if (mTextView.getText().length() < 1000)
-                                    mTextView.append("\n" + mt4);
+                                    mTextView.append("\t\t\t" + mt4);
                                 else
                                     mTextView.setText(mt4);
                             }
