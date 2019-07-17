@@ -16,17 +16,26 @@ import android.widget.Toast;
 
 import com.example.rxpermisson.PermissionAppCompatActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import rx.Subscriber;
+
+import static java.lang.Math.max;
 
 public class MainActivity extends PermissionAppCompatActivity implements View.OnClickListener{
     private DrawingView mDrawingView;
     private static TextView mTextView = null;
+    private TextView mTvReDraw = null;
     private static int COLOR_PANEL = 0;
     private static int BRUSH = 0;
     private ImageButton mColorPanel;
     private ImageButton mBrush;
     private ImageButton mUndo;
     private ImageButton mSave;
+    public static Map<String,Integer> map=new HashMap<>();
+    public static String fs ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
+    private static String lfs = null;
 
     public static Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -47,15 +56,20 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     if(mt3.length>=2){
                         int k = Integer.parseInt(mt3[0]);
                         int r = Integer.parseInt(mt3[1]);
-                        String fs ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
                         if(k>=0 && k<24) {
-                            String mt4 = fs.substring(k,k+1)+": "+r;
-                            if (!mTextView.equals(null)) {
-                                if (mTextView.getText().length() < 1000)
-                                    mTextView.append("\t\t\t" + mt4);
-                                else
-                                    mTextView.setText(mt4);
+                            String fs1 = fs.substring(k,k+1);
+                            if(fs1.equals(lfs))
+                                map.put(fs1,max(map.get(fs1),r));
+                            else
+                                map.put(fs1,r);
+                            lfs = fs1;
+                            String info = "";
+                            for(int j=0;j<24;j++) {
+                                info = info + fs.substring(j,j+1) + ": " + map.get(fs.substring(j,j+1))+"\t\t\t\t\t";
+                                if(j%3==2)
+                                    info = info +"\n";
                             }
+                            mTextView.setText(info);
                         }
                     }
                     break;
@@ -100,6 +114,13 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
         mDrawingView = (DrawingView) findViewById(R.id.img_screenshot);
         mTextView = (TextView)findViewById(R.id.tvmessage);
         mTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
+        mTvReDraw = (TextView)findViewById(R.id.tvredraw);
+        mTvReDraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                mDrawingView.ReDrawImage();
+            }
+        });
         mBrush = (ImageButton) findViewById(R.id.brush);
         mColorPanel = (ImageButton) findViewById(R.id.color_panel);
         mUndo = (ImageButton) findViewById(R.id.undo);
@@ -110,6 +131,8 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
         mUndo.setOnClickListener(this);
         mSave.setOnClickListener(this);
         initPaintMode();
+        for(int i=0;i<24;i++)
+            map.put(fs.substring(i,i+1),0);
     }
 
     private void initPaintMode() {

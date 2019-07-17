@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FsChart</string>
+    <string name="tv_redraw_txt">按照左边数据重新作图</string>
     <string name="base_permission">APP启动需要访问文件，使用网络，访问通讯录等权限</string>
 </resources>

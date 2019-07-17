@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,14 +10,41 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_gravity="center" />
-    <TextView
-        android:id="@+id/tvmessage"
+    <LinearLayout
+        android:id="@+id/tv_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="false"
-        android:layout_gravity="center" />
+        android:background="@color/lightBlack"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvmessage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:background="@color/colorPrimary"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:textColor="@color/red"
+            tools:background="@android:color/holo_orange_dark" />
+
+        <TextView
+            android:id="@+id/tvredraw"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/translucent"
+            android:clickable="true"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:text="@string/tv_redraw_txt"
+            android:textColor="@color/red"
+            android:textSize="30dp"
+            tools:background="@android:color/holo_orange_light" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/paint_bar"
         android:layout_width="match_parent"
