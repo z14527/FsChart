@@ -52,7 +52,6 @@ public class DrawingView extends View {
     private Matrix matrix;
     private float mPaintBarPenSize;
     private int mPaintBarPenColor;
-    private List<Float> fsList = new ArrayList<Float>();
 
     private float x0 = 726;
     private float y0 = 651;
@@ -268,15 +267,6 @@ public class DrawingView extends View {
         mOriginBitmap = bitmap;
         mBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         mCanvas = new Canvas(mBitmap);
-//        mPath = new Path();
-//        mPath.reset();
-//        mPath.moveTo(x0, y0);
-//        for(int i=0;i<24;i++){
-//            float x1 = (float)(x0 + r*cos(i*PI/12));
-//            float y1 = (float)(y0 + r*sin(i*PI/12));
-//            mPath.lineTo(x1,y1);
-//            mCanvas.drawPath(mPath, mPaint);
-//        }
         invalidate();
     }
     public void ReDrawImage() {
@@ -288,10 +278,43 @@ public class DrawingView extends View {
         float x11 = 0;
         float y11 = 0;
         for(int i=0;i<24;i++){
-            String fs1 = MainActivity.fs.substring(i,i+1);
-            int r1 = MainActivity.map.get(fs1);
-            float x1 = (float)(x0 + r1*cos((i+0.5)*PI/12));
-            float y1 = (float)(y0 + r1*sin((i+0.5)*PI/12));
+            String fs1 = MainActivity.shan.substring(i,i+1);
+            int r1 = MainActivity.ShanMap.get(fs1);
+            if(!MainActivity.bshan){
+                fs1 = MainActivity.shui.substring(i,i+1);
+                r1 = MainActivity.ShuiMap.get(fs1);
+            }
+            float x1 = (float)(x0 + r1*cos(i*PI/12));
+            float y1 = (float)(y0 + r1*sin(i*PI/12));
+            if(i==0) {
+                mPath.moveTo(x1, y1);
+                x11 = x1;
+                y11 = y1;
+            }
+            else
+                mPath.lineTo(x1,y1);
+            mCanvas.drawPath(mPath, mPaint);
+        }
+        mPath.lineTo(x11,y11);
+        mCanvas.drawPath(mPath, mPaint);
+        invalidate();
+    }
+    public void ToShuiDrawImage() {
+        if(!MainActivity.bshan)
+            return;
+        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        loadImage(mOriginBitmap);
+        savePath.remove();
+        mPath = new Path();
+        mPath.reset();
+        float x11 = 0;
+        float y11 = 0;
+        for(int i=0;i<24;i++){
+            String fs1 = MainActivity.shui.substring(i,i+1);
+            int r1 = MainActivity.ShanMap.get(fs1);
+            MainActivity.ShuiMap.put(fs1,r1);
+            float x1 = (float)(x0 + r1*cos(i*PI/12));
+            float y1 = (float)(y0 + r1*sin(i*PI/12));
             if(i==0) {
                 mPath.moveTo(x1, y1);
                 x11 = x1;

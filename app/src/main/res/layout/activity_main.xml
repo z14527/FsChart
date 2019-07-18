@@ -29,7 +29,42 @@
             android:scrollbars="vertical"
             android:textColor="@color/red"
             tools:background="@android:color/holo_orange_dark" />
-
+        <LinearLayout
+            android:id="@+id/tv_fs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightBlack"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_to_shui"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.3"
+                android:background="@color/translucent"
+                android:clickable="true"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical"
+                android:text="@string/tv_to_shui_txt"
+                android:textColor="@color/red"
+                android:textSize="20dp"
+                tools:background="@android:color/holo_blue_light" />
+            <TextView
+                android:id="@+id/tv_shan_shui_switch"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/translucent"
+                android:clickable="true"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical"
+                android:text="@string/tv_shan_shui_switch_txt"
+                android:textColor="@color/red"
+                android:textSize="20dp"
+                tools:background="@android:color/holo_purple" />
+        </LinearLayout>
         <TextView
             android:id="@+id/tvredraw"
             android:layout_width="0dp"

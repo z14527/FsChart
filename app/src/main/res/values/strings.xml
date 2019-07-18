@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FsChart</string>
     <string name="tv_redraw_txt">按照左边数据重新作图</string>
+    <string name="tv_to_shui_txt">山数据推出水数据</string>
+    <string name="tv_shan_shui_switch_txt">山水数据切换</string>
     <string name="base_permission">APP启动需要访问文件，使用网络，访问通讯录等权限</string>
 </resources>

@@ -27,29 +27,26 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
     private DrawingView mDrawingView;
     private static TextView mTextView = null;
     private TextView mTvReDraw = null;
+    private TextView mTvToShui = null;
+    private TextView mTvShanShuiSwitch = null;
     private static int COLOR_PANEL = 0;
     private static int BRUSH = 0;
     private ImageButton mColorPanel;
     private ImageButton mBrush;
     private ImageButton mUndo;
     private ImageButton mSave;
-    public static Map<String,Integer> map=new HashMap<>();
-    public static String fs ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
-    private static String lfs = null;
+    public static Map<String,Integer> ShanMap=new HashMap<>();
+    public static Map<String,Integer> ShuiMap=new HashMap<>();
+    public static String shan ="庚申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉";
+    private static String lshan = null;
+    public static String shui ="申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉庚";
+    private static String lshui = null;
+    public static boolean bshan = true;
 
     public static Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             int what = msg.what;
             switch (what) {
-                case 1:
-                    String mt = msg.getData().getString("send");
-                    if(!mTextView.equals(null)){
-                        if(mTextView.getText().length()<1000)
-                            mTextView.append("\n"+mt);
-                        else
-                            mTextView.setText(mt);
-                    }
-                    break;
                 case 3:
                     String mt2 = msg.getData().getString("send");
                     String[] mt3 = mt2.split(":");
@@ -57,19 +54,35 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                         int k = Integer.parseInt(mt3[0]);
                         int r = Integer.parseInt(mt3[1]);
                         if(k>=0 && k<24) {
-                            String fs1 = fs.substring(k,k+1);
-                            if(fs1.equals(lfs))
-                                map.put(fs1,max(map.get(fs1),r));
-                            else
-                                map.put(fs1,r);
-                            lfs = fs1;
-                            String info = "";
-                            for(int j=0;j<24;j++) {
-                                info = info + fs.substring(j,j+1) + ": " + map.get(fs.substring(j,j+1))+"\t\t\t\t\t";
-                                if(j%3==2)
-                                    info = info +"\n";
+                            if(bshan) {
+                                String fs1 = shan.substring(k, k + 1);
+                                if (fs1.equals(lshan))
+                                    ShanMap.put(fs1, max(ShanMap.get(fs1), r));
+                                else
+                                    ShanMap.put(fs1, r);
+                                lshan = fs1;
+                                String info = "";
+                                for (int j = 0; j < 24; j++) {
+                                    info = info + shan.substring(j, j + 1) + ": " + ShanMap.get(shan.substring(j, j + 1)) + "\t\t\t\t\t";
+                                    if (j % 3 == 2)
+                                        info = info + "\n";
+                                }
+                                mTextView.setText(info);
+                            }else{
+                                String fs1 = shui.substring(k, k + 1);
+                                if (fs1.equals(lshui))
+                                    ShuiMap.put(fs1, max(ShuiMap.get(fs1), r));
+                                else
+                                    ShuiMap.put(fs1, r);
+                                lshui = fs1;
+                                String info = "";
+                                for (int j = 0; j < 24; j++) {
+                                    info = info + shui.substring(j, j + 1) + ": " + ShuiMap.get(shui.substring(j, j + 1)) + "\t\t\t\t\t";
+                                    if (j % 3 == 2)
+                                        info = info + "\n";
+                                }
+                                mTextView.setText(info);
                             }
-                            mTextView.setText(info);
                         }
                     }
                     break;
@@ -121,6 +134,21 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                 mDrawingView.ReDrawImage();
             }
         });
+        mTvToShui = (TextView)findViewById(R.id.tv_to_shui);
+        mTvToShui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                mDrawingView.ToShuiDrawImage();
+            }
+        });
+        mTvShanShuiSwitch = (TextView)findViewById(R.id.tv_shan_shui_switch);
+        mTvShanShuiSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                bshan = !bshan;
+                mDrawingView.ReDrawImage();
+            }
+        });
         mBrush = (ImageButton) findViewById(R.id.brush);
         mColorPanel = (ImageButton) findViewById(R.id.color_panel);
         mUndo = (ImageButton) findViewById(R.id.undo);
@@ -131,8 +159,10 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
         mUndo.setOnClickListener(this);
         mSave.setOnClickListener(this);
         initPaintMode();
-        for(int i=0;i<24;i++)
-            map.put(fs.substring(i,i+1),0);
+        for(int i=0;i<24;i++) {
+            ShanMap.put(shan.substring(i, i + 1), 0);
+            ShuiMap.put(shui.substring(i, i + 1), 0);
+        }
     }
 
     private void initPaintMode() {
