@@ -77,7 +77,7 @@
             android:scrollbars="vertical"
             android:text="@string/tv_redraw_txt"
             android:textColor="@color/red"
-            android:textSize="30dp"
+            android:textSize="20dp"
             tools:background="@android:color/holo_orange_light" />
     </LinearLayout>
     <LinearLayout

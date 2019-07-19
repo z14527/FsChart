@@ -108,7 +108,6 @@ public class DrawingView extends View {
                 widthSize = mBitmap.getWidth();
             }
         }
-   //     sendMsg("onMeasure: heightSize: " + heightSize + " widthSize: " + widthSize);
         setMeasuredDimension(widthSize, heightSize);
     }
 
@@ -272,7 +271,6 @@ public class DrawingView extends View {
     public void ReDrawImage() {
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         loadImage(mOriginBitmap);
-        savePath.remove();
         mPath = new Path();
         mPath.reset();
         float x11 = 0;
@@ -280,7 +278,7 @@ public class DrawingView extends View {
         for(int i=0;i<24;i++){
             String fs1 = MainActivity.shan.substring(i,i+1);
             int r1 = MainActivity.ShanMap.get(fs1);
-            if(!MainActivity.bshan){
+            if(MainActivity.bshan == 0){
                 fs1 = MainActivity.shui.substring(i,i+1);
                 r1 = MainActivity.ShuiMap.get(fs1);
             }
@@ -300,11 +298,11 @@ public class DrawingView extends View {
         invalidate();
     }
     public void ToShuiDrawImage() {
-        if(!MainActivity.bshan)
+        if(MainActivity.bshan == 0)
             return;
         mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         loadImage(mOriginBitmap);
-        savePath.remove();
+        //savePath.removeAll().remove();
         mPath = new Path();
         mPath.reset();
         float x11 = 0;

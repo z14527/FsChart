@@ -41,7 +41,7 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
     private static String lshan = null;
     public static String shui ="申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉庚";
     private static String lshui = null;
-    public static boolean bshan = true;
+    public static int bshan = 1;
 
     public static Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -54,7 +54,7 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                         int k = Integer.parseInt(mt3[0]);
                         int r = Integer.parseInt(mt3[1]);
                         if(k>=0 && k<24) {
-                            if(bshan) {
+                            if(bshan==1) {
                                 String fs1 = shan.substring(k, k + 1);
                                 if (fs1.equals(lshan))
                                     ShanMap.put(fs1, max(ShanMap.get(fs1), r));
@@ -87,7 +87,8 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     }
                     break;
                 case 4:
-
+                    String mt4 = msg.getData().getString("send");
+                    mTextView.append(mt4+"\n");
                     break;
 
                 default:
@@ -138,6 +139,7 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
         mTvToShui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                mDrawingView.setPenColor(getColor(R.color.blue));
                 mDrawingView.ToShuiDrawImage();
             }
         });
@@ -145,7 +147,14 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
         mTvShanShuiSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                bshan = !bshan;
+                if(bshan == 1) {
+                    mDrawingView.setPenColor(getColor(R.color.blue));
+                    bshan = 0;
+                }
+                else{
+                    mDrawingView.setPenColor(getColor(R.color.red));
+                    bshan = 1;
+                }
                 mDrawingView.ReDrawImage();
             }
         });
