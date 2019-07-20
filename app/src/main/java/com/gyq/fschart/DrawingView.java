@@ -296,6 +296,7 @@ public class DrawingView extends View {
         mPath.lineTo(x11,y11);
         mCanvas.drawPath(mPath, mPaint);
         invalidate();
+        sendMsg("", 5);
     }
     public void ToShuiDrawImage() {
         if(MainActivity.bshan == 0)
