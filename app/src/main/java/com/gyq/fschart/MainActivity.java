@@ -100,6 +100,9 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                                     dialog.show();
                                 }
                             }else{
+                                k = k - 1;
+                                if(k < 0 )
+                                    k = k + 24;
                                 String fs1 = shui.substring(k, k + 1);
                                 if(r>=0) {
                                     if (fs1.equals(lshui))
