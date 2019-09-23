@@ -56,6 +56,7 @@ public class DrawingView extends View {
     private float x0 = 726;
     private float y0 = 651;
     private float r = (1090-726);
+    private int clickCount = 0;
 
     public DrawingView(Context c) {
         this(c, null);
@@ -202,6 +203,25 @@ public class DrawingView extends View {
                 mLastDrawPath = new DrawPath(mPath, mPaint.getColor(), mPaint.getStrokeWidth());
                 savePath.add(mLastDrawPath);
                 mPath = null;
+                clickCount++;
+                if(clickCount==2){
+                    for (int k = 0; k < 6; k++) {
+                        double theta = abs(180 * Math.atan((y - y0) / (x - x0)) / PI);
+                        if (k * 15 < theta && (k + 1) * 15 > theta) {
+                            int k1 = k;
+                            if (x < x0 && y > y0)
+                                k1 = 11 - k1;
+                            if (x < x0 && y < y0)
+                                k1 = 12 + k1;
+                            if (x > x0 && y < y0)
+                                k1 = 23 - k1;
+                            MainActivity.context = getContext();
+                            sendMsg("" + k1 + ":-1", 3);
+                            break;
+                        }
+                    }
+                    clickCount = 0;
+                }
                 break;
             default:
                 break;

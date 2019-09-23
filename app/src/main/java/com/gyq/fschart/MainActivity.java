@@ -1,15 +1,19 @@
 package com.gyq.fschart;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +46,8 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
     public static String shui ="申坤未丁午丙巳巽辰乙卯甲寅艮丑癸子壬亥乾戌辛酉庚";
     private static String lshui = null;
     public static int bshan = 1;
+    public static AlertDialog.Builder builder = null;
+    public static Context context = null;
 
     public static Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -56,32 +62,82 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                         if(k>=0 && k<24) {
                             if(bshan==1) {
                                 String fs1 = shan.substring(k, k + 1);
-                                if (fs1.equals(lshan))
-                                    ShanMap.put(fs1, max(ShanMap.get(fs1), r));
-                                else
-                                    ShanMap.put(fs1, r);
-                                lshan = fs1;
-                                String info = "";
-                                for (int j = 0; j < 24; j++) {
-                                    info = info + shan.substring(j, j + 1) + ": " + ShanMap.get(shan.substring(j, j + 1)) + "\t\t\t\t\t";
-                                    if (j % 3 == 2)
-                                        info = info + "\n";
+                                if(r>=0){
+                                    if (fs1.equals(lshan))
+                                        ShanMap.put(fs1, max(ShanMap.get(fs1), r));
+                                    else
+                                        ShanMap.put(fs1, r);
+                                    lshan = fs1;
+                                    String info = "";
+                                    for (int j = 0; j < 24; j++) {
+                                        info = info + shan.substring(j, j + 1) + ": " + ShanMap.get(shan.substring(j, j + 1)) + "\t\t\t\t\t";
+                                        if (j % 3 == 2)
+                                            info = info + "\n";
+                                    }
+                                    mTextView.setText(info);
+                                }else{
+                                    builder = new AlertDialog.Builder(context);
+                                    builder.setTitle("请输入 "+fs1+" 的山的数值(-100 - 100)：");    //设置对话框标题
+                                    builder.setIcon(android.R.drawable.btn_star);   //设置对话框标题前的图标
+                                    final EditText edit = new EditText(context);
+                                    builder.setView(edit);
+                                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String shan1 = edit.getText().toString();
+                                            Toast.makeText(context,"输入的数值为："+shan1,Toast.LENGTH_LONG);
+                                        }
+                                    });
+                                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(context, "你点了取消", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    builder.setCancelable(true);    //设置按钮是否可以按返回键取消,false则不可以取消
+                                    AlertDialog dialog = builder.create();  //创建对话框
+                                    dialog.setCanceledOnTouchOutside(true); //设置弹出框失去焦点是否隐藏,即点击屏蔽其它地方是否隐藏
+                                    dialog.show();
                                 }
-                                mTextView.setText(info);
                             }else{
                                 String fs1 = shui.substring(k, k + 1);
-                                if (fs1.equals(lshui))
-                                    ShuiMap.put(fs1, max(ShuiMap.get(fs1), r));
-                                else
-                                    ShuiMap.put(fs1, r);
-                                lshui = fs1;
-                                String info = "";
-                                for (int j = 0; j < 24; j++) {
-                                    info = info + shui.substring(j, j + 1) + ": " + ShuiMap.get(shui.substring(j, j + 1)) + "\t\t\t\t\t";
-                                    if (j % 3 == 2)
-                                        info = info + "\n";
+                                if(r>=0) {
+                                    if (fs1.equals(lshui))
+                                        ShuiMap.put(fs1, max(ShuiMap.get(fs1), r));
+                                    else
+                                        ShuiMap.put(fs1, r);
+                                    lshui = fs1;
+                                    String info = "";
+                                    for (int j = 0; j < 24; j++) {
+                                        info = info + shui.substring(j, j + 1) + ": " + ShuiMap.get(shui.substring(j, j + 1)) + "\t\t\t\t\t";
+                                        if (j % 3 == 2)
+                                            info = info + "\n";
+                                    }
+                                    mTextView.setText(info);
+                                }else{
+                                    builder = new AlertDialog.Builder(context);
+                                    builder.setTitle("请输入 "+fs1+" 的水的数值(-100 - 100)：");    //设置对话框标题
+                                    builder.setIcon(android.R.drawable.btn_star);   //设置对话框标题前的图标
+                                    final EditText edit = new EditText(context);
+                                    builder.setView(edit);
+                                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            String shui1 = edit.getText().toString();
+                                            Toast.makeText(context,"输入的数值为："+shui1,Toast.LENGTH_LONG);
+                                        }
+                                    });
+                                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(context, "你点了取消", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    builder.setCancelable(true);    //设置按钮是否可以按返回键取消,false则不可以取消
+                                    AlertDialog dialog = builder.create();  //创建对话框
+                                    dialog.setCanceledOnTouchOutside(true); //设置弹出框失去焦点是否隐藏,即点击屏蔽其它地方是否隐藏
+                                    dialog.show();
                                 }
-                                mTextView.setText(info);
                             }
                         }
                     }
