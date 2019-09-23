@@ -149,7 +149,25 @@ public class MainActivity extends PermissionAppCompatActivity implements View.On
                     String mt4 = msg.getData().getString("send");
                     mTextView.append(mt4+"\n");
                     break;
-
+                case 5:
+                    if(bshan==1) {
+                        String info = "";
+                        for (int j = 0; j < 24; j++) {
+                            info = info + shan.substring(j, j + 1) + ": " + ShanMap.get(shan.substring(j, j + 1)) + "\t\t\t\t\t";
+                            if (j % 3 == 2)
+                                info = info + "\n";
+                        }
+                        mTextView.setText(info);
+                    }else{
+                        String info = "";
+                        for (int j = 0; j < 24; j++) {
+                            info = info + shui.substring(j, j + 1) + ": " + ShuiMap.get(shui.substring(j, j + 1)) + "\t\t\t\t\t";
+                            if (j % 3 == 2)
+                                info = info + "\n";
+                        }
+                        mTextView.setText(info);
+                    }
+                    break;
                 default:
 
                     break;
